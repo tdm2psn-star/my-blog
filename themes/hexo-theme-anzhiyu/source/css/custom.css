@@ -1,0 +1,35 @@
+/* 缩小文章详情页顶部封面图的高度 */
+#page-header.post-bg {
+    height: 300px !important; /* 原本可能是 400px 或更高，改为 300px 比较干练 */
+}
+
+/* 调整封面图上的文字位置，使其不被遮挡 */
+#post-info {
+    bottom: 50px !important;
+}
+
+/* 首页文章卡片精简 */
+#recent-posts > .recent-post-item {
+    display: flex;
+    flex-direction: row; /* 强制水平排列 */
+    height: 120px !important; /* 限制高度，使其看起来像“一行” */
+    align-items: center;
+}
+
+/* 缩小卡片内的封面图 */
+#recent-posts > .recent-post-item .post_cover {
+    width: 150px !important; /* 缩小图片宽度 */
+    height: 100px !important;
+    margin-left: 10px;
+}
+
+/* 调整文字内容区域 */
+#recent-posts > .recent-post-item > .recent-post-info {
+    width: calc(100% - 160px) !important;
+    padding: 0 20px !important;
+}
+
+/* 隐藏文章摘要，只留标题和日期（更显简洁） */
+#recent-posts > .recent-post-item .content {
+    display: none !important;
+}

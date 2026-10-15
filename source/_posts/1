@@ -1,0 +1,168 @@
+这是一个非常棒的深度思考。**答案是肯定的：Nginx 完全可以识别，而且这正是 Nginx 最核心的强项。**
+
+即便你没有公网 IP，且所有流量都通过同一个 Cloudflare Tunnel 隧道进入笔记本，Nginx 依然能精准区分。
+
+### 1. 技术原理：HTTP 协议的 `Host` 字段
+
+当用户在浏览器输入 `blog.abc.cn` 时，虽然数据流是通过隧道传输的，但浏览器发出的 **HTTP 请求头（Request Header）** 中会包含一个字段：`Host: blog.abc.cn`。
+
+Nginx 在接收到流量后，不会只看端口（Listen 80），它会去读取这个 `Host` 字段，并与配置文件中的 `server_name` 进行匹配。
+
+---
+
+### 2. 关键：Cloudflare Tunnel 的配置
+
+要实现这个功能，你不仅要配置 Nginx，还需要在 **Cloudflare 控制台（Zero Trust Dashboard）** 里进行相应的分发设置。
+
+你需要将不同的二级域名都指向本地 Nginx 所在的同一个地址：
+
+| Public Hostname | Service (本地地址) |
+| --- | --- |
+| `blog.abc.cn` | `http://localhost:80` |
+| `music.abc.cn` | `http://localhost:80` |
+
+**流程如下：**
+
+1. 用户访问 `blog.abc.cn` -> Cloudflare 边缘节点。
+2. 流量通过隧道进入笔记本的 `cloudflared` 进程。
+3. `cloudflared` 将请求转发给本地的 `http://localhost:80`。
+4. **重点来了**：转发时，请求头里的 `Host: blog.abc.cn` 是被完整保留的。
+5. 本地 Nginx 收到请求，看到 `Host` 是 `blog.abc.cn`，于是执行第一个 `server` 块，去 `/home/sky/my-blog/public` 找文件。
+
+---
+
+### 3. Nginx 完整配置模板
+
+为了让配置更稳健，建议按照以下方式编写：
+
+```nginx
+# 默认服务器（防止直接用 IP 访问或其他未定义域名）
+server {
+    listen 80 default_server;
+    server_name _;
+    return 444; # 直接丢弃未定义域名的请求
+}
+
+# 博客
+server {
+    listen 80;
+    server_name blog.abc.cn;
+
+    location / {
+        root /home/sky/my-blog/public;
+        index index.html;
+        try_files $uri $uri/ =404;
+    }
+}
+
+# 音乐
+server {
+    listen 80;
+    server_name music.abc.cn;
+
+    location / {
+        root /var/www/music;
+        index index.html;
+        try_files $uri $uri/ =404;
+    }
+}
+
+```
+
+---
+
+### 4. 这种方案的优势（针对内网穿透）
+
+* **节省隧道资源**：你只需要在笔记本上运行 **一个** `cloudflared` 隧道。
+* **统一入口**：Nginx 作为“流量总调度”，可以方便地做日志记录、流量限制。
+* **SSL 卸载**：如果你在 Cloudflare 开启了 HTTPS，Cloudflare 会负责加密，流量到了本地 Nginx 时已经是解密后的 80 端口（HTTP），这大大简化了本地配置。
+
+### 💡 程序员的实操检查点
+
+1. **检查 Nginx 权限**：Nginx 用户必须有权访问 `/home/sky/my-blog/public`。如果报错 403，执行 `chmod -R 755 /home/sky/my-blog/public`。
+2. **测试配置**：每次修改配置后，运行 `sudo nginx -t` 检查语法，然后 `sudo systemctl reload nginx`。
+
+**现在的逻辑闭环了吗？如果 Cloudflare 控制台那边的多个 Hostname 指向已经配好了，你的“一机多站”计划就差最后一次 `reload` 了。**
+
+
+
+这是一个非常硬核且高频的架构需求。简单直接的结论是：**不能直接用 Nginx 的 `server_name` 逻辑来转发 SSH，但可以通过 Cloudflare Tunnel 的原生功能或 Nginx 的 Stream 模块来实现。**
+
+### 为什么不能像 Web 那样转发 SSH？
+
+Nginx 区分 `blog.abc.cn` 和 `music.abc.cn` 靠的是 **HTTP 协议头里的 `Host` 字段**。
+然而，**SSH 协议（运行在 TCP 层）没有“域名”这个概念**。当 SSH 请求到达 Nginx 时，它只知道有人连了 22 端口，并不知道对方是冲着哪个域名来的。
+
+---
+
+### 最佳方案：让 `cloudflared` 一次性带走这三个功能
+
+你不需要 Nginx 去转发 SSH，因为 `cloudflared` 隧道本身就原生支持多协议分发（Multi-service Ingress）。
+
+#### 1. 修改 Cloudflare Tunnel 的配置文件 (config.yml)
+
+在你的笔记本上，找到 Cloudflare 隧道的配置文件（通常在 `~/.cloudflared/config.yml`），按照以下逻辑配置：
+
+```yaml
+tunnel: <你的隧道ID>
+credentials-file: /home/sky/.cloudflared/<ID>.json
+
+ingress:
+  # 1. 博客 (分发给本地 Nginx)
+  - hostname: blog.abc.cn
+    service: http://localhost:80
+
+  # 2. 音乐 (分发给本地 Nginx)
+  - hostname: music.abc.cn
+    service: http://localhost:80
+
+  # 3. SSH (分发给本地 SSH 服务端口)
+  - hostname: ssh.abc.cn
+    service: ssh://localhost:22
+
+  # 4. 最后必须有一个兜底（404）
+  - service: http_status:404
+
+```
+
+#### 2. 在 Cloudflare 控制台添加 DNS
+
+在 Zero Trust 面板中，为 `ssh.abc.cn` 添加一条 Public Hostname，类型选 **SSH**，服务指向 `ssh://localhost:22`。
+
+---
+
+### 如何连接这个“穿透”后的 SSH？
+
+因为 Cloudflare 隧道是对流量进行了加密封装，你不能直接 `ssh sky@ssh.abc.cn`。
+
+#### 方案 A：在客户端使用 `cloudflared` (推荐)
+
+在你**用来连接的电脑**（比如你的主力 Windows 或另一台 Linux）上也安装 `cloudflared`，然后配置 `~/.ssh/config`：
+
+```text
+Host ssh.abc.cn
+    ProxyCommand /usr/local/bin/cloudflared access ssh --hostname %h
+
+```
+
+之后你只需要在终端输入 `ssh sky@ssh.abc.cn`，流量就会自动通过隧道安全地钻进你的笔记本。
+
+#### 方案 B：使用 Cloudflare 网页端终端 (最方便)
+
+在 Cloudflare Zero Trust 面板中开启 **Browser-rendered SSH**。
+这样你甚至不需要 SSH 客户端，直接打开浏览器访问 `ssh.abc.cn`，输入账号密码就能在网页里操作笔记本。
+
+---
+
+### 💡 总结你的三合一工作流
+
+1. **Web 流量**：`blog.abc.cn` 和 `music.abc.cn` 通过隧道进入，交给 **Nginx**。Nginx 根据域名分发到不同的本地静态文件夹。
+2. **SSH 流量**：`ssh.abc.cn` 通过隧道进入，直接交给 **OpenSSH Server** (Port 22)。
+
+### 这样做的好处：
+
+* **端口复用**：你不需要在笔记本上开任何多余的防火墙端口。
+* **安全性**：你的 SSH 22 端口彻底消失在公网上，只有通过 Cloudflare 认证的人才能看到。
+* **纯净**：Nginx 只需要专注处理网页静态资源，不需要处理复杂的 TCP 流转发。
+
+**你的 `config.yml` 已经准备好改写了吗？如果配置过程中出现 `cloudflared` 启动失败，记得检查 `ingress` 列表的缩进，YAML 对空格非常敏感。**
