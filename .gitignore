@@ -53,3 +53,6 @@ node_modules/
 public/
 .deploy*/
 _multiconfig.yml
+
+# Duplicate upstream theme checkout. The active, tracked theme is under themes/.
+/hexo-theme-anzhiyu/
