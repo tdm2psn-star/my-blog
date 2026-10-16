@@ -35,7 +35,7 @@ nav:
       item:
         - name: 安知鱼图床
           link: https://image.anheyu.com/
-          icon: https://image.anheyu.com/favicon.ico
+          icon: /vendor/img/anheyu-favicon.ico
 
 # mourn （哀悼日，指定日期网站简单变灰，不包括滚动条）
 # 注意： 仅网站首页变灰，其他页面正常显示
@@ -172,7 +172,7 @@ error_img:
 error_404:
   enable: true
   subtitle: "请尝试站内搜索寻找文章"
-  background: https://bu.dusays.com/2023/05/08/645907596997d.gif
+  background: /vendor/img/404-background.gif
 
 post_meta:
   page: # Home Page
@@ -813,8 +813,9 @@ aside:
     content: 欢迎来看我的博客鸭~
   card_weixin:
     enable: true
-    face: https://bu.dusays.com/2023/01/13/63c02edf44033.png
-    backFace: https://bu.dusays.com/2023/05/13/645fa415e8694.png
+    face: /vendor/img/weixin-card.webp
+    # 原远程背面图已失效，使用已本地化的正面图作为回退。
+    backFace: /vendor/img/weixin-card.webp
   card_recent_post:
     enable: true
     limit: 5 # if set 0 will show all
@@ -1075,7 +1076,7 @@ home_top:
   banner:
     tips: 我的项目
     title: Theme-AnZhiYu
-    image: https://bu.dusays.com/2023/05/13/645fa3cf90d70.webp
+    image: /vendor/img/home-banner.webp
     link: https://docs.anheyu.com/
 
 
@@ -1267,8 +1268,9 @@ CDN:
   internal_provider: local
 
   # The CDN provider of third party scripts (第三方 js 的 cdn 配置)
-  # option: elemecdn/jsdelivr/unpkg/cdnjs/onmicrosoft/cbd/anheyu/custom
-  third_party_provider: cbd
+  # option: local/elemecdn/jsdelivr/unpkg/cdnjs/onmicrosoft/cbd/anheyu/custom
+  # All currently enabled third-party assets are vendored under source/pluginsSrc.
+  third_party_provider: local
 
   # Add version number to CDN, true or false
   version: true
