@@ -813,6 +813,8 @@ aside:
     content: 欢迎来看我的博客鸭~
   card_weixin:
     enable: true
+    name: 微以微言微纪年
+    link: /wechat/
     face: /vendor/img/weixin-card.webp
     # 原远程背面图已失效，使用已本地化的正面图作为回退。
     backFace: /vendor/img/weixin-card.webp
@@ -1054,17 +1056,17 @@ home_top:
   siteText: anheyu.com
   category:
     - name: 技术
-      path: /categories/前端开发/
+      path: /categories/教程/
       shadow: var(--anzhiyu-shadow-blue)
       class: blue
       icon: anzhiyu-icon-dove
     - name: 杂文
-      path: /categories/大学生涯/
+      path: /categories/杂文/
       shadow: var(--anzhiyu-shadow-red)
       class: red
       icon: anzhiyu-icon-fire
     - name: 摄影
-      path: /categories/生活日常/
+      path: /categories/摄影/
       shadow: var(--anzhiyu-shadow-green)
       class: green
       icon: anzhiyu-icon-book

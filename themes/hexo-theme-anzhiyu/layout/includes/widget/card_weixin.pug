@@ -1,8 +1,6 @@
-- let faceImg = theme.aside.card_weixin.face
-- let backFaceImg = theme.aside.card_weixin.backFace
 if theme.aside.card_weixin.enable
-  .card-widget.anzhiyu-right-widget#card-wechat(onclick="window.open("/")")
-    #flip-wrapper
-      #flip-content
-        .face(style=`background: url(${faceImg}) center center / 100% no-repeat`)
-        .back.face(style=`background: url(${backFaceImg}) center center / 100% no-repeat`)
+  a.card-widget.anzhiyu-right-widget#card-wechat(href=theme.aside.card_weixin.link || '/wechat/' aria-label=theme.aside.card_weixin.name)
+    .wechat-name(style="text-align:center;padding:8px 12px;font-weight:bold;color:white")
+      div 公众号
+      div(style="margin:12px 0")= theme.aside.card_weixin.name
+      small 微信搜索 · 点击查看

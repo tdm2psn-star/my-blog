@@ -56,3 +56,5 @@ _multiconfig.yml
 
 # Duplicate upstream theme checkout. The active, tracked theme is under themes/.
 /hexo-theme-anzhiyu/
+/.handoff-backup-*/
+/.local-tools/
