@@ -1,4 +1,5 @@
-/* 缩小文章详情页顶部封面图的高度 */
+/* Compact desktop layout; mobile overrides follow below. */
+@media screen and (min-width: 769px) {
 #page-header.post-bg {
     height: 300px !important; /* 原本可能是 400px 或更高，改为 300px 比较干练 */
 }
@@ -32,4 +33,217 @@
 /* 隐藏文章摘要，只留标题和日期（更显简洁） */
 #recent-posts > .recent-post-item .content {
     display: none !important;
+}
+}
+
+/* Mobile reading layout: flexible heights and full-width text. */
+@media screen and (max-width: 768px) {
+  html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    scroll-padding-top: 80px;
+  }
+  body { font-size: 16px; line-height: 1.75; }
+  #body-wrap .layout#content-inner {
+    width: 100%; min-width: 0; padding: 12px;
+    background: var(--anzhiyu-background);
+  }
+  #content-inner > *, #recent-posts, #article-container {
+    min-width: 0; max-width: 100%;
+  }
+
+  /* The desktop decoration becomes a compact, touch-friendly category row. */
+  #home_top {
+    width: auto !important; height: auto !important;
+    margin: 12px 12px 0 !important; padding: 0 !important;
+  }
+  #home_top .swiper_container_card, #home_top #bannerGroup {
+    display: block !important; width: 100% !important;
+    min-width: 0; height: auto !important; overflow: visible;
+  }
+  #home_top #random-banner, #home_top .topGroup,
+  #home_top #swiper_container_blog { display: none !important; }
+  #home_top .categoryGroup {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px; width: 100%; min-width: 0; height: auto;
+  }
+  #home_top .categoryGroup .categoryItem {
+    display: block !important; width: auto !important;
+    min-width: 0; height: auto; margin: 0; transform: none;
+  }
+  #home_top a.categoryButton {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 48px; padding: 8px; font-size: 16px;
+    line-height: 1.5; text-align: center;
+  }
+  #home_top .categoryButtonText { padding: 0; }
+  #home_top .categoryButton i, #home_top .categoryButton svg,
+  #home_top .categoryButton::after { display: none; }
+  #categoryBar { position: static; margin: 0 0 12px; }
+  #category-bar {
+    height: auto; min-height: 48px; padding: 4px 8px; border-radius: 10px;
+  }
+  #category-bar #catalog-bar {
+    min-width: 0; flex: 1; overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  #catalog-list .catalog-list-item a {
+    display: inline-flex; align-items: center;
+    min-height: 44px; padding: 0 12px; font-size: 15px;
+  }
+
+  #recent-posts > .recent-post-item,
+  #recent-posts > .recent-post-item:not(:first-child),
+  #recent-posts > .recent-post-item.lastestpost-item {
+    display: flex; flex-direction: column; align-items: stretch;
+    width: 100% !important; height: auto !important;
+    margin: 0 0 16px !important; border-radius: 12px; animation: none;
+  }
+  #recent-posts > .recent-post-item .post_cover {
+    flex: none; order: 0; width: 100% !important;
+    height: auto !important; aspect-ratio: 16 / 9;
+    max-height: 220px; margin: 0; border-radius: 0;
+  }
+  #recent-posts > .recent-post-item .post_cover img {
+    display: block; width: 100%; height: 100%; object-fit: cover;
+  }
+  #recent-posts > .recent-post-item > .recent-post-info {
+    order: 1; width: 100% !important; height: auto !important;
+    min-height: 0; padding: 16px !important; overflow: visible;
+  }
+  #recent-posts .recent-post-info .recent-post-info-top { padding: 0; }
+  #recent-posts .recent-post-info-top-tips {
+    flex-wrap: wrap; gap: 4px; margin: 0 0 8px;
+  }
+  #recent-posts .recent-post-info-top .article-categories-original,
+  #recent-posts .recent-post-info-top .newPost { font-size: 13px; }
+  #recent-posts .unvisited-post { display: none; }
+  #recent-posts .recent-post-info .article-title {
+    display: block; margin: 0; overflow: visible;
+    -webkit-line-clamp: unset; font-size: 20px;
+    line-height: 1.5; overflow-wrap: anywhere;
+  }
+  #recent-posts > .recent-post-item > .recent-post-info > .article-meta-wrap {
+    position: static; flex-wrap: wrap; gap: 6px 12px;
+    width: 100%; margin-top: 12px; padding: 0;
+    font-size: 13px; line-height: 1.6; white-space: normal;
+  }
+  #recent-posts .article-meta-wrap .tags { display: none; }
+  #content-inner #recent-posts > .recent-post-item > .recent-post-info > .content {
+    display: -webkit-box !important; -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2; height: auto; max-height: none;
+    margin: 10px 0 0; padding: 0; opacity: 1; overflow: hidden;
+    font-size: 15px; line-height: 1.7; color: var(--anzhiyu-secondtext);
+  }
+
+  /* A solid header avoids low-contrast text over a photograph. */
+  #page-header.post-bg {
+    height: auto !important; min-height: 0; margin-bottom: 0;
+    padding: 88px 20px 28px; background: var(--anzhiyu-card-bg) !important;
+  }
+  #page-header.post-bg::before, #page-header.post-bg #post-top-cover,
+  #page-header.post-bg .main-hero-waves-area { display: none !important; }
+  #page-header.post-bg #post-info {
+    position: relative; inset: auto; width: 100%; height: auto;
+    margin: 0; padding: 0; align-items: flex-start;
+    transform: none; animation: none;
+    color: var(--anzhiyu-fontcolor); text-shadow: none;
+  }
+  #post-info .post-title {
+    display: block; width: 100%; margin: 12px 0 !important;
+    overflow: visible; -webkit-line-clamp: unset;
+    font-size: clamp(24px, 6.5vw, 30px); line-height: 1.45;
+    text-align: left; color: var(--anzhiyu-fontcolor); overflow-wrap: anywhere;
+  }
+  #post-info #post-meta, #post-info #post-meta a,
+  #post-info #post-firstinfo, #post-info #post-firstinfo a {
+    color: var(--anzhiyu-fontcolor); text-shadow: none;
+  }
+  #post-info #post-meta {
+    align-items: flex-start; font-size: 13px; line-height: 1.8;
+  }
+  #post-info #post-meta > .meta-firstline,
+  #post-info #post-meta > .meta-secondline {
+    justify-content: flex-start; font-size: inherit;
+  }
+  #page-header.post-bg #nav {
+    background: var(--anzhiyu-card-bg); color: var(--anzhiyu-fontcolor);
+  }
+  #page-header.post-bg #nav a, #page-header.post-bg #nav i {
+    color: var(--anzhiyu-fontcolor); text-shadow: none;
+  }
+
+  #body-wrap .layout #post, #body-wrap .layout #page,
+  #body-wrap .layout #archive, #body-wrap .layout #category,
+  #body-wrap .layout #tag {
+    width: 100%; padding: 20px 16px !important;
+    border-radius: 12px; background: var(--anzhiyu-card-bg);
+  }
+  #article-container {
+    font-size: 17px; line-height: 1.9; color: var(--anzhiyu-fontcolor);
+    overflow-wrap: anywhere; word-break: normal;
+  }
+  #article-container p { margin-bottom: 1.25em; text-align: left; }
+  #article-container h1 { font-size: 1.65em; }
+  #article-container h2 { font-size: 1.4em; }
+  #article-container h3 { font-size: 1.2em; }
+  #article-container h1, #article-container h2,
+  #article-container h3, #article-container h4 {
+    line-height: 1.5; scroll-margin-top: 80px;
+  }
+  #article-container img, #article-container video {
+    max-width: 100%; height: auto; margin: 20px auto; border-radius: 8px;
+  }
+  #article-container iframe { max-width: 100%; }
+  #article-container blockquote { margin: 20px 0; padding: 12px 14px; }
+  #article-container ul, #article-container ol { padding-left: 1.5em; }
+  /* Scroll wide technical content inside its box instead of widening the page. */
+  #article-container pre, #article-container figure.highlight,
+  #article-container .table-wrap {
+    max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  }
+  #article-container pre, #article-container figure.highlight {
+    font-size: 14px; line-height: 1.7;
+  }
+  #article-container :not(pre) > code { overflow-wrap: anywhere; white-space: normal; }
+  #article-container pre code, #article-container figure.highlight code {
+    overflow-wrap: normal; white-space: pre;
+  }
+  #post .post-copyright { min-width: 0; overflow-wrap: anywhere; }
+  #pagination .page-number, #pagination .extend {
+    min-width: 44px; min-height: 44px; line-height: 44px;
+  }
+  #nav input, .search-dialog input { font-size: 16px; }
+
+  /* Category and archive titles must not be squeezed into a single short line. */
+  .article-sort { margin: 0; }
+  .article-sort .article-sort-item:not(.year) {
+    height: auto; min-height: 88px; padding: 12px 0; align-items: flex-start;
+  }
+  .article-sort .article-sort-item-img {
+    flex: 0 0 88px; width: 88px; min-width: 88px;
+    height: 72px; min-height: 72px;
+  }
+  .article-sort .article-sort-item-info {
+    flex: 1; min-width: 0; height: auto; max-height: none;
+    padding: 0 0 0 12px;
+  }
+  .article-sort .no-article-cover .article-sort-item-info { padding-left: 0; }
+  .article-sort .article-sort-item-info .article-sort-item-title {
+    display: block; height: auto; overflow: visible; -webkit-line-clamp: unset;
+    font-size: 17px; line-height: 1.6; overflow-wrap: anywhere;
+  }
+  .article-sort .article-sort-item-info .article-meta-wrap {
+    height: auto; margin-top: 8px;
+  }
+  .article-sort .article-sort-item-tags { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #home_top *, #recent-posts > .recent-post-item,
+  #page-header.post-bg, #page-header.post-bg #post-info {
+    animation: none !important; transition: none !important;
+  }
 }
