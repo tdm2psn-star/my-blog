@@ -813,7 +813,9 @@ aside:
     content: 欢迎来看我的博客鸭~
   card_weixin:
     enable: true
-    name: 微以微言微纪年
+    name: 联系方式
+    wechat: scj20212021
+    email: wolfyangzhou@163.com
     link: /wechat/
     face: /vendor/img/weixin-card.webp
     # 原远程背面图已失效，使用已本地化的正面图作为回退。
@@ -1253,7 +1255,7 @@ inject:
   head:
     # 自定义css
     # - <link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'">
-    - <link rel="stylesheet" href="/css/custom.css?v=mobile-20261024">
+    - <link rel="stylesheet" href="/css/custom.css?v=readable-20261027">
 
 
   bottom:

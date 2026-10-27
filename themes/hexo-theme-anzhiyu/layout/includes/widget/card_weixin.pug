@@ -1,6 +1,10 @@
 if theme.aside.card_weixin.enable
-  a.card-widget.anzhiyu-right-widget#card-wechat(href=theme.aside.card_weixin.link || '/wechat/' aria-label=theme.aside.card_weixin.name)
-    .wechat-name(style="text-align:center;padding:8px 12px;font-weight:bold;color:white")
-      div 公众号
-      div(style="margin:12px 0")= theme.aside.card_weixin.name
-      small 微信搜索 · 点击查看
+  .card-widget.anzhiyu-right-widget#card-wechat
+    .contact-title= theme.aside.card_weixin.name
+    .contact-row
+      span.contact-label 微信
+      span= theme.aside.card_weixin.wechat
+    .contact-row
+      span.contact-label 邮箱
+      a.contact-email(href='mailto:' + theme.aside.card_weixin.email)= theme.aside.card_weixin.email
+    a.contact-details(href=theme.aside.card_weixin.link || '/wechat/') 查看联系方式

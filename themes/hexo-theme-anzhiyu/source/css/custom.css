@@ -1,14 +1,5 @@
 /* Compact desktop layout; mobile overrides follow below. */
 @media screen and (min-width: 769px) {
-#page-header.post-bg {
-    height: 300px !important; /* 原本可能是 400px 或更高，改为 300px 比较干练 */
-}
-
-/* 调整封面图上的文字位置，使其不被遮挡 */
-#post-info {
-    bottom: 50px !important;
-}
-
 /* 首页文章卡片精简 */
 #recent-posts > .recent-post-item {
     display: flex;
@@ -34,6 +25,95 @@
 #recent-posts > .recent-post-item .content {
     display: none !important;
 }
+}
+
+/* All article headers use a solid background, including posts without covers. */
+#page-header.post-bg {
+  --post-heading-text: #1f2937;
+  --post-heading-muted: #526174;
+  --post-heading-chip: #eef2f7;
+  height: auto !important;
+  min-height: 0;
+  margin-bottom: 0;
+  padding: 100px max(24px, calc((100% - 1400px + 3rem) / 2)) 32px;
+  background: var(--anzhiyu-card-bg) !important;
+}
+[data-theme="dark"] #page-header.post-bg {
+  --post-heading-text: #edf2f7;
+  --post-heading-muted: #b6c2d1;
+  --post-heading-chip: #293342;
+}
+#page-header.post-bg::before,
+#page-header.post-bg #post-top-cover,
+#page-header.post-bg .main-hero-waves-area {
+  display: none !important;
+}
+#page-header.post-bg #post-info {
+  position: relative;
+  inset: auto !important;
+  width: 100%;
+  max-width: 1400px;
+  height: auto;
+  margin: 0 auto;
+  padding: 0;
+  align-items: flex-start;
+  animation: none;
+  transform: none;
+  color: var(--post-heading-text);
+  text-shadow: none;
+}
+#post-info .post-title {
+  display: block;
+  width: 100%;
+  margin: 16px 0;
+  overflow: visible;
+  -webkit-line-clamp: unset;
+  font-size: clamp(28px, 3.2vw, 48px);
+  line-height: 1.45;
+  text-align: left;
+  color: var(--post-heading-text, var(--anzhiyu-fontcolor));
+  text-shadow: none;
+  overflow-wrap: anywhere;
+}
+#page-header.post-bg #post-info #post-meta,
+#page-header.post-bg #post-info #post-meta a {
+  color: var(--post-heading-muted);
+  text-shadow: none;
+}
+#page-header.post-bg #post-firstinfo,
+#page-header.post-bg #post-firstinfo a,
+#page-header.post-bg #post-firstinfo span {
+  color: var(--post-heading-text);
+  text-shadow: none;
+}
+#page-header.post-bg #post-firstinfo .meta-firstline {
+  flex-wrap: wrap;
+  gap: 8px;
+  height: auto;
+  white-space: normal;
+}
+#page-header.post-bg #post-firstinfo a.post-meta-original,
+#page-header.post-bg #post-firstinfo a.post-meta-categories {
+  width: auto;
+  margin: 0;
+  background: var(--post-heading-chip);
+}
+#page-header.post-bg #post-firstinfo span.post-meta-categories {
+  width: auto;
+  height: auto;
+  margin: 0;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+#page-header.post-bg #nav {
+  background: var(--anzhiyu-card-bg);
+  color: var(--post-heading-text);
+}
+#page-header.post-bg #nav a,
+#page-header.post-bg #nav i,
+#page-header.post-bg #nav #page-name {
+  color: var(--post-heading-text) !important;
+  text-shadow: none;
 }
 
 /* Mobile reading layout: flexible heights and full-width text. */

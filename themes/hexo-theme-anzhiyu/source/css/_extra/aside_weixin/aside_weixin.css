@@ -1,12 +1,48 @@
 #aside-content .card-widget#card-wechat {
-  background: #57bd6a;
+  background: #237b47;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-content: center;
-  padding: 0;
-  cursor: pointer;
+  padding: 20px 16px;
+  cursor: auto;
   border: none;
-  height: 110px;
+  height: auto;
+  min-height: 150px;
+  color: #fff;
+  gap: 10px;
+}
+#card-wechat .contact-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+#card-wechat .contact-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  font-size: 14px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+#card-wechat .contact-label {
+  flex: 0 0 auto;
+  font-weight: 600;
+}
+#card-wechat .contact-email,
+#card-wechat .contact-details {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+#card-wechat .contact-details {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 13px;
 }
 [data-theme="dark"] #aside-content .card-widget#card-wechat {
   background-color: #121121;
